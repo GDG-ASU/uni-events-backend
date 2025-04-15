@@ -131,7 +131,7 @@ All endpoints are prefixed with `/api/v1`
 - User registration and login are handled on the frontend using Clerk SDK.
 - The backend uses Clerk JWT for verifying requests.
 - Example of backend endpoint for authenticated user:
-    - `GET /users/me`  – returns current user profile (used to determine role/ID).
+    - `GET /users/getme`  – returns current user profile (used to determine role/ID).
 ---
 
 ### **Students**
