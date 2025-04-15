@@ -11,23 +11,22 @@ import (
 
 var DB *gorm.DB
 
-func InitDB() {
+func InitDB() *gorm.DB {
+    err := godotenv.Load("../../.env")
+    if err != nil {
+        log.Println("Could not load .env")
+    }
 
-	err := godotenv.Load("../../.env")
-	if err != nil {
-		log.Println("Could not load .env from root (../../.env)")
-	}
+    dsn := os.Getenv("DATABASE_URL")
+    if dsn == "" {
+        log.Fatalf("Failed to get DATABASE_URL from environment variables")
+    }
 
-	dsn := os.Getenv("DATABASE_URL")
-	if dsn == "" {
-		log.Fatalf("Failed to get DATABASE_URL from environment variables")
-	}
+    db, err := gorm.Open(postgres.Open(dsn), &gorm.Config{})
+    if err != nil {
+        log.Fatalf("Failed to connect to database: %v", err)
+    }
 
-	var err2 error
-	DB, err2 = gorm.Open(postgres.Open(dsn), &gorm.Config{})
-	if err2 != nil {
-		log.Fatalf("Failed to connect to database: %v", err2)
-	}
-
-	log.Println("Database connected successfully")
+    log.Println("Database connected successfully")
+    return db
 }
