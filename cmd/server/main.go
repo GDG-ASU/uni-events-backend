@@ -15,7 +15,7 @@ func main() {
 	db := config.InitDB()
 	
 	// db.AutoMigrate(&models.User{}) 
-	
+
 	userRepo := repositories.NewUserRepository(db)
 	userService := service.NewUserService(userRepo)
 	userHandler := user.NewHandler(userService)
@@ -24,7 +24,7 @@ func main() {
 	apiGroup := e.Group("/api/v1")
 	userGroup := apiGroup.Group("/users")
 	userGroup.Use(middlewares.ClerkAuthMiddleware)
-	userGroup.GET("/me", userHandler.Me)
+	userGroup.GET("/getme", userHandler.GetMe)
 
 	e.Logger.Fatal(e.Start(":8080"))
 }

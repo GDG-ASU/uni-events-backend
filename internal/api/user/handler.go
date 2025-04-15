@@ -20,7 +20,7 @@ func NewHandler(userService service.UserService) *Handler {
 	}
 }
 
-func (h *Handler) Me(c echo.Context) error {
+func (h *Handler) GetMe(c echo.Context) error {
 	clerkID := utils.GetClerkUserID(c)
 
 	user, err := h.service.GetUserByClerkID(c.Request().Context(),clerkID)
