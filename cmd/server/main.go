@@ -37,6 +37,7 @@ func main() {
 	clubGroup := apiGroup.Group("/clubs")
 	clubGroup.Use(middlewares.ClerkAuthMiddleware)
 	clubGroup.POST("/create-club",clubHandler.CreateClub)
+	clubGroup.PATCH("/clubs/:id", clubHandler.UpdateClub)
 
 
 	e.Logger.Fatal(e.Start(":8080"))
