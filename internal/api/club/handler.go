@@ -36,7 +36,6 @@ type UpdateClubRequest struct {
 func (h *Handler) CreateClub(c echo.Context) error {
 	clerkID := utils.GetClerkUserID(c)
 
-	// You should already have a method to get the UserID from ClerkID
 	user, err := h.userService.GetUserByClerkID(c.Request().Context(), clerkID)
 	if err != nil {
 		return c.JSON(http.StatusInternalServerError, echo.Map{"error": "User not found"})
@@ -51,7 +50,7 @@ func (h *Handler) CreateClub(c echo.Context) error {
 		Name:        req.Name,
 		Description: req.Description,
 		Owners: []models.ClubOwner{
-			{UserID: user.ID}, // Link user as the owner
+			{UserID: user.ID},
 		},
 	}
 
