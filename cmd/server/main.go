@@ -6,7 +6,6 @@ import (
 	"uni-events-backend/internal/api/event"
 	"uni-events-backend/internal/api/user"
 	"uni-events-backend/internal/middlewares"
-	"uni-events-backend/internal/models"
 	"uni-events-backend/internal/repositories"
 	"uni-events-backend/internal/service"
 
@@ -17,7 +16,7 @@ func main() {
 	e := echo.New()
 	db := config.InitDB()
 	
-   db.AutoMigrate(&models.User{},&models.Club{},&models.ClubOwner{},&models.Event{}) 
+ //  db.AutoMigrate(&models.User{},&models.Club{},&models.ClubOwner{},&models.Event{}) 
 
 	userRepo := repositories.NewUserRepository(db)
 	userService := service.NewUserService(userRepo)
@@ -35,6 +34,7 @@ func main() {
 
 	// Group routes
 	apiGroup := e.Group("/api/v1")
+	
 	userGroup := apiGroup.Group("/users")
 	userGroup.Use(middlewares.ClerkAuthMiddleware)
 	userGroup.GET("/getme", userHandler.GetMe)
@@ -47,6 +47,13 @@ func main() {
 	eventGroup := apiGroup.Group("/event")
 	eventGroup.Use(middlewares.ClerkAuthMiddleware)
 	eventGroup.POST("/create-event",eventHandler.CreateEvent)
+	eventGroup.PATCH("/update-event/:id", eventHandler.UpdateEvent)
+	eventGroup.DELETE("/delete/:id", eventHandler.DeleteEvent)
+
+
+	// Public
+	eventGroupPublic := apiGroup.Group("/event")
+	eventGroupPublic.GET("/list", eventHandler.ListEvents)
 
 	e.Logger.Fatal(e.Start(":8080"))
 }
